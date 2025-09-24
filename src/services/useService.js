@@ -1,5 +1,3 @@
-const { info } = require("autoprefixer");
-
 const BASE_URL = 'https://randomuser.me/api/';
 const DEFAULT_PARAMS = {
     results: 25,
