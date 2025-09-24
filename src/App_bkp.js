@@ -1,18 +1,7 @@
-import React from 'react';
 import logo from './logo.svg';
-import useUserStore from './store/useUserStore';
 import './App.css';
 
 function App() {
-  const users = useUserStore((state) => state.users);
-  const fetchUsers = useUserStore((state) => state.fetchUsers);
-
-  // Exemplo de uso do estado e ação
-  React.useEffect(() => {
-    fetchUsers(1, true); // Carregar a primeira página de usuários ao montar o componente
-  }, [fetchUsers]);
-  console.log(users);
-
   return (
     <div className="App">
       <header className="App-header">
