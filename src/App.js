@@ -1,6 +1,7 @@
 import React from 'react';
 // import useUserStore from './store/useUserStore';
 import UserList from './components/UserList/UserList';
+import UserDetailModal from './components/UserDetailModal/UserDetailModal';
 import { useSearch, useFavorites } from './hooks/useUserHooks';
 import './App.css';
 
@@ -68,6 +69,9 @@ function App() {
 
         {/* Lista/Tabela de usuários */}
         <UserList />
+
+        {/* Modal de detalhes do usuário */}
+        <UserDetailModal />
       </main>
 
       {/* Footer */}
