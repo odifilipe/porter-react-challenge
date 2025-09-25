@@ -2,7 +2,7 @@ const BASE_URL = 'https://randomuser.me/api/';
 const DEFAULT_PARAMS = {
     results: 25,
     seed: 'abc',
-    inc: 'login,name,email,picture,phone,registered'
+    inc: 'login,name,email,picture,phone,registered,gender,nat'
 };
 
 class UserService {

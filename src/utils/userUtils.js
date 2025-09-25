@@ -19,6 +19,8 @@ export const formatUser = (rawUser) => {
             medium: rawUser.picture?.medium || '',
             large: rawUser.picture?.large || ''
         },
+        gender: rawUser.gender || '',
+        nat: rawUser.nat || '',
         phone: rawUser.phone || '',
         registered: rawUser.registered?.date || '',
         // Campos adicionais
