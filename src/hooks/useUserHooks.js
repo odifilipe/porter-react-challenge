@@ -1,10 +1,8 @@
-import { clear } from '@testing-library/user-event/dist/clear';
-import useUserStore from '../stores/userStore';
-import { act } from 'react';
+import useUserStore from '../store/useUserStore';
 
 /**
  * Hook para gerenciar os favoritos
- * @returns {Object} - Métodose e estados dos favotiros
+ * @returns {Object} - Métodos e estados dos favoritos
  * **/
 export const useFavorites = () => {
     const favorites = useUserStore(state => state.favorites);
@@ -15,7 +13,7 @@ export const useFavorites = () => {
         favoritesCount: favorites.length,
         isFavorite: (userId) => favorites.includes(userId), //Verifica se o usuário é favorito
         toggleFavorite, // Alterna o status de favorito
-        addFavorites: (userId) => { // Adiciona um usuário aos favoritos
+        addToFavorites: (userId) => { // Adiciona um usuário aos favoritos
             if (!favorites.includes(userId)) {
                 toggleFavorite(userId);
             }
@@ -45,7 +43,7 @@ export const useSearch = () => {
         clearSearch,
         showFavoritesOnly,
         toggleFavoritesFilter,
-        hasActiveFilters: searchTerm.trim() !== '' || showFavoritesOnly //verificar se há filtros ativos
+        hasActiveFilters: (searchTerm?.trim() ?? '') !== '' || showFavoritesOnly //verificar se há filtros ativos
     };
 };
 
@@ -69,9 +67,11 @@ export const useUI = () => {
         hasError: Boolean(error), // Verifica se há erro
         openUserDetail: (user) => setSelectedUser(user), // Abre o modal de detalhes do usuário
         closeUserDetail: () => setSelectedUser(null), // Fecha o modal de detalhes do usuário
-        retry: (action) => { // Função para tentar novamente uma ação, com clearError}
+        retry: (action) => { // Função para tentar novamente uma ação, com clearError
             clearError();
-            action();
+            if (typeof action === 'function') {
+                action();
+            }
         }
     };
 };

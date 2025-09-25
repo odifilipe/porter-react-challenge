@@ -13,7 +13,7 @@ const useUserStore = create()(
                 favorites: [],
                 loading: false,
                 error: null,
-                serchTerm: '',
+                searchTerm: '',
                 showFavoritesOnly: false,
                 currentPage: 1,
                 selectedUser: null,
@@ -38,7 +38,7 @@ const useUserStore = create()(
                             const formattedUsers = result.users.map(user => {
                                 const formatted = formatUser(user);
                                 return { ...formatted, isFavorite: favorites.includes(formatted.id) }
-                            });
+                            });                            
 
                             // Nova lista de usuários
                             const newUsers = replace || page === 1
@@ -55,7 +55,7 @@ const useUserStore = create()(
                             // Aplicar filtros automaticamente
                             get().applyFilters();
                         } else {
-                            set({ erro: result.error, loading: false });
+                            set({ error: result.error, loading: false });
                         }
                     } catch (error) {
                         console.error('Erro no store:', error);
@@ -90,7 +90,7 @@ const useUserStore = create()(
                  * @param {string} term - Termo da busca
                  * **/
                 setSearchTerm: (term) => {
-                    set({ serchTerm: term });
+                    set({ searchTerm: term });
                     get().applyFilters();
                 },
 
@@ -98,7 +98,7 @@ const useUserStore = create()(
                  * Limpar Busca
                  * **/
                 clearSearch: () => {
-                    set({ serchTerm: '' });
+                    set({ searchTerm: '' });
                     get().applyFilters();
                 },
 
