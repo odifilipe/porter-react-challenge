@@ -98,7 +98,7 @@ const LoadingTableSkeleton = () => (
 );
 
 const UserList = () => {
-    const { users, loading, error, hasMore, loadMore, loadInitial } = useUsers();
+    const { users, loading, error, currentPage, totalPages, itemsPerPage, hasPrevPage, hasNextPage, prevPage, nextPage, setItemsPerPage, loadInitial } = useUsers();
     const { filteredUsers, searchTerm, showFavoritesOnly } = useSearch();
     const { hasError } = useUI();
     // console.log(users);
@@ -162,7 +162,7 @@ const UserList = () => {
             )}
 
             {/* Botão carregar mais */}
-            {!loading && !showFavoritesOnly && !searchTerm && hasMore && (
+            {/* {!loading && !showFavoritesOnly && !searchTerm && hasMore && (
                 <div className="flex justify-center">
                     <button
                         onClick={loadMore}
@@ -171,14 +171,67 @@ const UserList = () => {
                         Carregar mais usuários
                     </button>
                 </div>
-            )}
+            )} */}
+            {/* Controle de paginação */}
+            <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+                <div className="flex flex-wrap justify-between items-center">
+                    {/* <div className="text-sm text-gray-600 mb-2 sm:mb-0">
+                        Página {currentPage} de {totalPages} • Mostrando {itemsPerPage} por página
+                    </div> */}
+                    <div className="flex items-center space-x-4">
+                        <div className="text-sm text-gray-600">
+                            Página {currentPage} de {totalPages} • Mostrando {itemsPerPage} por página
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <label htmlFor="itemsPerPage" className="text-sm text-gray-600">
+                                Itens:
+                            </label>
+                            <select
+                                id="itemsPerPage"
+                                value={itemsPerPage}
+                                onChange={(e) => setItemsPerPage(parseInt(e.target.value, 10))}
+                                className="border border-gray-300 rounded-md text-sm py-1 px-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            >
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="25">25</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={prevPage}
+                            disabled={!hasPrevPage}
+                            className={`inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md ${
+                                hasPrevPage 
+                                    ? 'bg-white text-gray-700 hover:bg-gray-50' 
+                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                            }`}
+                        >
+                            Anterior
+                        </button>
+                        <button
+                            onClick={nextPage}
+                            disabled={!hasNextPage}
+                            className={`inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md ${
+                                hasNextPage 
+                                    ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                                    : 'bg-blue-300 text-white cursor-not-allowed'
+                            }`}
+                        >
+                            Próximo
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             {/* Informações de paginação */}
             {filteredUsers?.length > 0 && (
                 <div className="text-center text-sm text-gray-500">
                     Exibindo {filteredUsers?.length} usuário{filteredUsers?.length !== 1 ? 's' : ''}
                     {!showFavoritesOnly && !searchTerm && ` de ${users?.length} carregado${users?.length !== 1 ? 's' : ''}`}
-                    {hasMore && !showFavoritesOnly && !searchTerm && ' (mais disponíveis)'}
+                    {/* {hasMore && !showFavoritesOnly && !searchTerm && ' (mais disponíveis)'} */}
                 </div>
             )}
 

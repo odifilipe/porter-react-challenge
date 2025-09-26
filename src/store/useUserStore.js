@@ -16,8 +16,10 @@ const useUserStore = create()(
                 searchTerm: '',
                 showFavoritesOnly: false,
                 currentPage: 1,
+                totalPages: 0, // Estado para controlar o total de páginas
+                itemsPerPage: 5, // Quantidade de itens por página
+                totalUsers: 250, // Total de usuários disponíveis na API (Fixo, para simular um limite de usuários do sistema)
                 selectedUser: null,
-                hasMore: true,
 
                 // ------- Ações Principais ------- //
                 /**
@@ -26,32 +28,27 @@ const useUserStore = create()(
                  * @param {boolean} replace - substituir dados existentes?
                  * **/
                 fetchUsers: async (page = 1, replace = false) => {
-                    const { users, favorites } = get();
+                    const { totalUsers,itemsPerPage, favorites } = get();
 
                     set({ loading: true, error: null });
 
                     try {
-                        const result = await userService.getUsers(page);
+                        const result = await userService.getUsers(page, itemsPerPage);
 
                         if (result.success) {
                             //Formatar usuários e marcar favoritos
                             const formattedUsers = result.users.map(user => {
                                 const formatted = formatUser(user);
                                 return { ...formatted, isFavorite: favorites.includes(formatted.id) }
-                            });                            
-
-                            // Nova lista de usuários
-                            const newUsers = replace || page === 1
-                                ? formattedUsers
-                                : [...users, ...formattedUsers];
-
-                            set({
-                                users: newUsers,
-                                currentPage: page,
-                                loading: false,
-                                hasMore: result.info.page < result.info.results // Simular hasMore
                             });
 
+                            set({
+                                users: formattedUsers,
+                                currentPage: page,
+                                loading: false,
+                                totalPages: Math.ceil(totalUsers / itemsPerPage) // Calcular total de páginas, com base no total de usuários (Valor fixo para simular limite de usuários)
+                            });
+                            
                             // Aplicar filtros automaticamente
                             get().applyFilters();
                         } else {
@@ -165,7 +162,9 @@ const useUserStore = create()(
                         showFavoritesOnly: false,
                         currentPage: 1,
                         selectedUser: null,
-                        hasMore: true
+                        totalPages: 0,
+                        itemsPerPage: 5,
+                        totalUsers: 250
                     });
                 },
 
@@ -177,7 +176,51 @@ const useUserStore = create()(
                     if (!loading && hasMore) {
                         get().fetchUsers(currentPage + 1, false);
                     }
+                },
+
+                /** 
+                 * Navegar para uma página específica
+                 * **/
+                goToPage: (page) => {
+                    const { totalPages } = get();
+                    if (page >= 1 && page <= totalPages) {
+                        get().fetchUsers(page);
+                    }
+                },
+                /** 
+                 * Navegar para a próxima página
+                 * **/
+                nextPage: () => {
+                    const { currentPage, totalPages } = get();
+                    if (currentPage < totalPages) {
+                        get().fetchUsers(currentPage + 1);
+                    }
+                },
+
+                /** 
+                 * Navegar para a página anterior
+                 * **/
+                prevPage: () => {
+                    const { currentPage } = get();
+                    if (currentPage > 1) {
+                        get().fetchUsers(currentPage - 1);
+                    }
+                },
+
+                /** 
+                 * Navegar para a página anterior
+                 * **/
+                setItemsPerPage: (size) => {
+                    const { totalUsers } = get();
+
+                    if ([5, 10, 15, 25].includes(size)) {
+                        set({ itemsPerPage: size,
+                            totalPages: Math.ceil(totalUsers / size) // Recalcula o total de páginas
+                         });
+                        get().fetchUsers(1); // Volta para a primeira página, com o novo tamanho
+                    }
                 }
+
             }),
             {
                 name: 'user-store', // Nome da  localStorage

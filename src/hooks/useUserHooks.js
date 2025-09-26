@@ -83,21 +83,33 @@ export const useUI = () => {
 export const useUsers = () => {
     const users = useUserStore(state => state.users);
     const filteredUsers = useUserStore(state => state.filteredUsers);
-    const currentPage = useUserStore(state => state.currentPage);
-    const hasMore = useUserStore(state => state.hasMore);
     const fetchUsers = useUserStore(state => state.fetchUsers);
     const loadMore = useUserStore(state => state.loadMore);
+    const currentPage = useUserStore(state => state.currentPage);
+    const totalPages = useUserStore(state => state.totalPages);
+    const goToPage = useUserStore(state => state.goToPage);
+    const nextPage = useUserStore(state => state.nextPage);
+    const prevPage = useUserStore(state => state.prevPage);
+    const itemsPerPage = useUserStore(state => state.itemsPerPage);
+    const setItemsPerPage = useUserStore(state => state.setItemsPerPage);
 
     return {
         users,
         filteredUsers,
         currentPage,
-        hasMore,
+        totalPages,
+        goToPage,
+        nextPage,
+        prevPage,
+        itemsPerPage,
+        setItemsPerPage,
         fetchUsers,
         loadMore,
-        loadInitial: () => fetchUsers(1, true), // Carrega a primeira página, substituindo os usuários atuais
-        reload: () => fetchUsers(currentPage, true), // Recarrega a primeira página, substituindo os usuários atuais
+        loadInitial: () => fetchUsers(1), // Carrega a primeira página
+        reload: () => fetchUsers(currentPage), // Recarrega a página atual
         totalUsers: users.length, // Total de usuários carregados
-        visibleUsers: filteredUsers.length // Total de usuários visíveis após filtros
+        visibleUsers: filteredUsers.length, // Total de usuários visíveis após filtros
+        hasNextPage: currentPage < totalPages, // Verifica se há próxima página
+        hasPrevPage: currentPage > 1 // Verifica se há página anterior
     };
 };
