@@ -12,7 +12,10 @@ const UserDetailModal = () => {
                 closeUserDetail();
             }
         };
-
+    
+        // Salvar o estilo original antes de modificar
+        const originalOverflow = document.body.style.overflow || '';
+        
         window.addEventListener('keydown', handleEscKey);
         
         // Desabilitar o scroll do body quando o modal estiver aberto
@@ -20,7 +23,17 @@ const UserDetailModal = () => {
         
         return () => {
             window.removeEventListener('keydown', handleEscKey);
-            document.body.style.overflow = 'auto';
+            
+            // Restaurar o estilo original ou definir como 'auto' se não havia estilo antes
+            document.body.style.overflow = originalOverflow || 'auto';
+            
+            // Garantir que o scroll seja restaurado após um pequeno delay
+            // Isso é importante para casos onde o componente é desmontado de forma inesperada
+            setTimeout(() => {
+                if (document.body.style.overflow === 'hidden') {
+                    document.body.style.overflow = 'auto';
+                }
+            }, 100);
         };
     }, [closeUserDetail]);
 
