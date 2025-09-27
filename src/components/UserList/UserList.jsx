@@ -98,8 +98,8 @@ const LoadingTableSkeleton = () => (
 );
 
 const UserList = () => {
-    const { users, loading, error, currentPage, totalPages, itemsPerPage, hasPrevPage, hasNextPage, prevPage, nextPage, setItemsPerPage, loadInitial } = useUsers();
-    const { filteredUsers, searchTerm, showFavoritesOnly } = useSearch();
+    const { users, loading, error, currentPage, totalPages, itemsPerPage, hasPrevPage, hasNextPage, prevPage, nextPage, setItemsPerPage, loadInitial, filteredUsers } = useUsers();
+    const { searchTerm, showFavoritesOnly } = useSearch();
     const { hasError } = useUI();
     // console.log(users);
     // console.log(filteredUsers);
@@ -149,7 +149,7 @@ const UserList = () => {
     return (
         <div className="space-y-6">
             {/* Tabela de usuários */}
-            <UserTable users={filteredUsers || users} />
+            <UserTable users={filteredUsers} />
 
             {/* Loading adicional (paginação) */}
             {loading && filteredUsers?.length > 0 && (

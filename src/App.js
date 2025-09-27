@@ -2,6 +2,7 @@ import React from 'react';
 // import useUserStore from './store/useUserStore';
 import UserList from './components/UserList/UserList';
 import UserDetailModal from './components/UserDetailModal/UserDetailModal';
+import SearchInput from './components/SearchInput/SearchInput';
 import { useSearch, useFavorites } from './hooks/useUserHooks';
 import './App.css';
 
@@ -38,11 +39,9 @@ function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search Bar para implementar */}
-        {/* <div className="mb-8">
+        <div className="mb-8">
           <SearchInput />
-        </div> */}
-
+        </div>
         {/* Status dos filtros */}
         {hasActiveFilters && (
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
