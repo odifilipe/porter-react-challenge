@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+# Porter React Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicação React para gerenciamento de usuários, com funcionalidades de listagem, busca, paginação e favoritos.
 
-## Available Scripts
+## Sobre o Projeto
 
-In the project directory, you can run:
+Esta aplicação permite visualizar e gerenciar uma lista de usuários obtidos da API Random User. Principais funcionalidades:
 
-### `npm start`
+- Listagem de usuários com paginação
+- Sistema de favoritos persistente
+- Busca por nome/email
+- Filtro para mostrar apenas favoritos
+- Interface responsiva
+- Detalhes do usuário em modal
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tecnologias Utilizadas
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React 19.1.1 - Framework para construção da interface
+- Zustand 5.0.8 - Gerenciamento de estado global
+- Tailwind CSS 3.4.17 - Framework CSS para estilização
+- Random User API - API pública para dados de usuários
 
-### `npm test`
+## Como Executar o Projeto
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Requisitos
 
-### `npm run build`
+- Node.js (v16+)
+- npm ou yarn
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Instalação e Execução Local
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Clone o repositório
+2. Instale as dependências:
+```bash
+npm install
+```
+3. Execute o projeto:
+```bash
+npm start
+```
+4. Acesse a aplicação em [http://localhost:3000](http://localhost:3000)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Execução com Docker
 
-### `npm run eject`
+#### Ambiente de Desenvolvimento (com hot-reload)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+docker-compose up dev
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### Ambiente de Produção
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+docker-compose up -d prod
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+A aplicação estará disponível em [http://localhost:3000](http://localhost:3000) em ambos os casos.
 
-## Learn More
+## Testes
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Execute os testes unitários com:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm test
+```
 
-### Code Splitting
+## API Utilizada
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+O projeto utiliza a [Random User API](https://randomuser.me/), uma API REST gratuita que fornece dados aleatórios de usuários para testes e prototipagem.
 
-### Analyzing the Bundle Size
+### Endpoints Utilizados
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `GET https://randomuser.me/api/` - Endpoint principal para buscar usuários
+- Parâmetros utilizados:
+  - `results`: Número de resultados por página
+  - `page`: Número da página
+  - `seed`: Semente para garantir resultados consistentes
+  - `inc`: Campos a serem incluídos na resposta
 
-### Making a Progressive Web App
+## Arquitetura do Projeto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Estrutura de Diretórios
 
-### Advanced Configuration
+```
+src/
+├── components/       # Componentes React reutilizáveis
+├── hooks/           # Hooks personalizados
+├── services/        # Serviços para comunicação com APIs
+├── store/           # Gerenciamento de estado global (Zustand)
+└── utils/           # Funções utilitárias
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Decisões Arquiteturais
 
-### Deployment
+#### 1. Gerenciamento de Estado com Zustand
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Optei pelo Zustand em vez de Redux ou Context API, por ser mais simples e intuitivo, suporte nativo para persistência e tamanho reduzido.
+Também foi escolhido por ser uma biblioteca que eu queria aprender a usar, o que foi possível nesta aplicação.
 
-### `npm run build` fails to minify
+#### 2. Separação de Responsabilidades
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Store: Centraliza o estado global e lógica de persistência
+- Hooks: Encapsulam a lógica de negócio e fornecem APIs simplificadas
+- Services: Isolam a comunicação com APIs externas
+- Components: Focados apenas na renderização e interação do usuário
+
+#### 3. Persistência de Favoritos
+
+A persistência de favoritos é implementada usando o middleware `persist` do Zustand:
+
+```javascript
+persist(
+    (set, get) => ({
+        // Estado e ações
+    }),
+    {
+        name: 'user-store', // Nome no localStorage
+        partialize: (state) => ({
+            favorites: state.favorites // Persiste apenas os favoritos
+        })
+    }
+)
+```
+Características:
+- Armazena apenas os IDs dos usuários favoritos no localStorage
+- Restaura automaticamente os favoritos ao recarregar a página
+- Aplica o status de favorito aos usuários carregados da API
+
+#### 4. Hooks Customizados
+
+Criamos hooks específicos para cada domínio:
+- `useFavorites`: Gerencia a adição/remoção de favoritos
+- `useSearch`: Controla a busca e filtragem
+- `useUsers`: Gerencia o carregamento e paginação
+- `useUI`: Controla estados de UI como loading e erros
+
+Esta abordagem permite:
+- Melhor organização do código
+- Reutilização de lógica entre componentes
+- Testes unitários mais simples
+- Componentes mais limpos e focados na UI
+
+#### 5. Icones utilizados
+
+Utilizei os icones do [Heroicons](https://heroicons.com/), para os icones do modal e do botão de favoritos.
