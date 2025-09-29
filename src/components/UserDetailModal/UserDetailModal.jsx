@@ -49,15 +49,6 @@ const UserDetailModal = () => {
         })
         : 'N/A';
 
-    // Formatar a data de nascimento (se disponível)
-    const birthDate = selectedUser.dob?.date
-        ? new Date(selectedUser.dob.date).toLocaleDateString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        })
-        : 'N/A';
-
     return (
         <div className="fixed inset-0 z-50 overflow-y-auto">
             {/* Overlay de fundo escuro */}
@@ -92,7 +83,6 @@ const UserDetailModal = () => {
                     <div className="p-6">
                         {/* Informações do perfil */}
                         <div className="flex flex-col sm:flex-row items-center sm:items-start mb-6">
-                            {/* Foto do usuário */}
                             <div className="mb-4 sm:mb-0 sm:mr-6">
                                 <img 
                                     src={selectedUser.picture?.large || selectedUser.picture?.medium} 
@@ -133,107 +123,55 @@ const UserDetailModal = () => {
                             </div>
                         </div>
                         
-                        {/* Detalhes em grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                            {/* Contato */}
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <h4 className="text-lg font-semibold text-gray-800 mb-3">Informações de Contato</h4>
-                                <ul className="space-y-2">
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">📱</span>
+                        {/* Informações extras */}
+                        <div className="mt-6">
+                            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                <h4 className="text-base font-semibold text-blue-800 mb-3 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4 mr-2 text-blue-600">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                                    </svg>
+                                    Informações Extras
+                                </h4>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="flex items-center">
+                                        <span className="text-blue-600 mr-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                            </svg>                                            
+                                        </span>
                                         <div>
-                                            <p className="font-medium">Telefone:</p>
-                                            <p className="text-gray-700">{selectedUser.phone || "Não informado"}</p>
+                                            <p className="font-medium text-gray-600 text-sm">Telefone</p>
+                                            <p className="text-gray-800 text-sm">{selectedUser.phone || "Não informado"}</p>
                                         </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">📧</span>
+                                    </div>
+                                    
+                                    <div className="flex items-center">
+                                        <span className="text-blue-600 mr-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
+                                            </svg>
+                                        </span>
                                         <div>
-                                            <p className="font-medium">Email:</p>
-                                            <p className="text-gray-700">{selectedUser.email || "Não informado"}</p>
+                                            <p className="font-medium text-gray-600 text-sm">Email</p>
+                                            <p className="text-gray-800 text-sm">{selectedUser.email || "Não informado"}</p>
                                         </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            {/* Localização */}
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <h4 className="text-lg font-semibold text-gray-800 mb-3">Localização</h4>
-                                <ul className="space-y-2">
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">🏠</span>
+                                    </div>
+                                </div>
+                                
+                                <div className="mt-3">
+                                    <div className="flex items-center">
+                                        <span className="text-blue-600 mr-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
+                                            </svg>
+                                        </span>
                                         <div>
-                                            <p className="font-medium">Endereço:</p>
-                                            <p className="text-gray-700">
-                                                {selectedUser.location?.street?.name && selectedUser.location?.street?.number
-                                                    ? `${selectedUser.location.street.name}, ${selectedUser.location.street.number}`
-                                                    : "Endereço não informado"}
-                                            </p>
+                                            <p className="font-medium text-gray-600 text-sm">Nacionalidade</p>
+                                            <p className="text-gray-800 text-sm">{selectedUser.nat || "Não informado"}</p>
                                         </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">🌆</span>
-                                        <div>
-                                            <p className="font-medium">Cidade/Estado:</p>
-                                            <p className="text-gray-700">
-                                                {selectedUser.location?.city && selectedUser.location?.state
-                                                    ? `${selectedUser.location.city}, ${selectedUser.location.state}`
-                                                    : "Não informado"}
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">🌎</span>
-                                        <div>
-                                            <p className="font-medium">País:</p>
-                                            <p className="text-gray-700">
-                                                {selectedUser.location?.country || "Não informado"}
-                                            </p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            {/* Informações Pessoais */}
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <h4 className="text-lg font-semibold text-gray-800 mb-3">Informações Pessoais</h4>
-                                <ul className="space-y-2">
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">🎂</span>
-                                        <div>
-                                            <p className="font-medium">Data de Nascimento:</p>
-                                            <p className="text-gray-700">{birthDate}</p>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">👤</span>
-                                        <div>
-                                            <p className="font-medium">Nacionalidade:</p>
-                                            <p className="text-gray-700">{selectedUser.nat || "Não informado"}</p>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            
-                            {/* Conta */}
-                            <div className="bg-gray-50 p-4 rounded-lg">
-                                <h4 className="text-lg font-semibold text-gray-800 mb-3">Informações da Conta</h4>
-                                <ul className="space-y-2">
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">🔑</span>
-                                        <div>
-                                            <p className="font-medium">Nome de Usuário:</p>
-                                            <p className="text-gray-700">{selectedUser.login?.username || "Não informado"}</p>
-                                        </div>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="text-gray-600 mr-2">📅</span>
-                                        <div>
-                                            <p className="font-medium">Registrado em:</p>
-                                            <p className="text-gray-700">{registeredDate}</p>
-                                        </div>
-                                    </li>
-                                </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
