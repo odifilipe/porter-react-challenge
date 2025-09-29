@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # Serviço de desenvolvimento com hot-reload
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: porter-react-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
+    command: npm start
+
+  # Serviço de produção usando servidor simples
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: porter-react-prod
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
